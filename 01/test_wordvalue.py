@@ -1,4 +1,5 @@
 import unittest
+import os
 
 from data import DICTIONARY, LETTER_SCORES
 from wordvalue import load_words, calc_word_value, max_word_value
@@ -27,4 +28,4 @@ class TestWordValue(unittest.TestCase):
 
 
 if __name__ == "__main__":
-   unittest.main() 
+    unittest.main()
