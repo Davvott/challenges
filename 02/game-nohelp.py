@@ -21,6 +21,13 @@ def max_word_value(words):
 
 def main():
     pass
+    # draw = draw_letters()
+    # Display drawn Letters
+    # Get user_input() for possible word
+    # Validate user_input, else continue asking
+    # Compare user_input against all permutations of drawn letters
+    # Obvs only valid permutations to be passed back
+    # Display highest scoring possible word -> max_word_value(permutations)
 
 
 if __name__ == "__main__":

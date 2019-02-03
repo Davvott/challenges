@@ -18,18 +18,19 @@ def calc_word_value(word):
     return value
 
 
-def max_word_value(word_list=load_words()):
+def max_word_value(words=load_words()):
     """Calculate the word with the max value, can receive a list
     of words as arg, if none provided uses default DICTIONARY"""
     curr_max = 0
-    max_word = ''
-    for word in word_list:
+    for word in words:
         val = calc_word_value(word)
         if val > curr_max:
             curr_max = val
             max_word = word
-    return max_word
+
+    return max(words, key=calc_word_value)
 
 
 if __name__ == "__main__":
+    print(max_word_value())
     pass    # run unittests to validate
