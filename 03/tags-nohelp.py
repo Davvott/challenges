@@ -1,6 +1,8 @@
+import re
 TOP_NUMBER = 10
 RSS_FEED = 'rss.xml'
 SIMILAR = 0.87
+TAG_REGEX = re.compile(r'<category>([^<]+)</category>')
 
 
 def get_tags():
