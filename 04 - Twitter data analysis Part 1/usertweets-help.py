@@ -23,6 +23,9 @@ class UserTweets(object):
         Use _get_tweets() helper to get a list of tweets.
         Save the tweets as data/<handle>.csv"""
         # ...
+        self.handle = handle
+        tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+        tweepy.API()
         self._tweets = list(self._get_tweets())
         self._save_tweets()
 
