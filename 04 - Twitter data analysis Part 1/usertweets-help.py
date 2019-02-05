@@ -24,24 +24,28 @@ class UserTweets(object):
         Save the tweets as data/<handle>.csv"""
         # ...
         self.handle = handle
-        tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-        tweepy.API()
-        self._tweets = list(self._get_tweets())
+        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+        auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
+        self.api = tweepy.API(auth)
+        self._tweets = self._get_tweets(handle, max_id=max_id)
         self._save_tweets()
 
-    def _get_tweets(self):
+    def _get_tweets(self, user, max_id=None):
         """Hint: use the user_timeline() method on the api you defined in init.
         See tweepy API reference: http://docs.tweepy.org/en/v3.5.0/api.html
         Use a list comprehension / generator to filter out fields
         id_str created_at text (optionally use namedtuple)"""
-        pass
+
+        tweets = [filter(Tweet, tweet) for tweet in self.api.user_timeline(user, max_id=max_id)]
+        print(tweets)
+        return tweets
 
     def _save_tweets(self):
         """Use the csv module (csv.writer) to write out the tweets.
         If you use a namedtuple get the column names with Tweet._fields.
         Otherwise define them as: id_str created_at text
         You can use writerow for the header, writerows for the rows"""
-        pass
+        csv.writer(DEST_DIR, Tweet._fields)
 
     def __len__(self):
         """See http://pybit.es/python-data-model.html"""
