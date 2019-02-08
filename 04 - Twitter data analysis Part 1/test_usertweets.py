@@ -5,20 +5,21 @@ from unittest.mock import patch
 
 
 from tweets import TWEETS  # mock data
-from usertweets import UserTweets, NUM_TWEETS
+from usertweets_help import UserTweets, NUM_TWEETS
 
 HANDLE = 'pybites'
 MAX_ID = '819831370113351680'
 
 Tweet = namedtuple('Tweet', ['id_str', 'created_at', 'text'])
 
-
+# Unicode Errorw/out utf, or Type Error missing args with utf encode
 def read_csv(fname):
     with open(fname) as f:
         has_header = csv.Sniffer().has_header(f.readline())
         f.seek(0)
         r = csv.reader(f)
         if has_header:
+            print('True')
             next(r, None)  # skip the header
         return [Tweet(*tw) for tw in r]  # list(r)
 

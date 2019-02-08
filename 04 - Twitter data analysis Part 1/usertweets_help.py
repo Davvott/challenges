@@ -11,8 +11,9 @@ DEST_DIR = 'data'
 EXT = 'csv'
 NUM_TWEETS = 100
 
+# namedtuple -> (Class name, space delimited attribute names)
 Tweet = namedtuple('Tweet', 'id_str created_at text')
-
+# Tweet is instance of namedtuple
 
 class UserTweets(object):
 
@@ -27,33 +28,44 @@ class UserTweets(object):
         auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
         auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
         self.api = tweepy.API(auth)
-        self._tweets = self._get_tweets(handle, max_id=max_id)
+        self.output_file = '{}.{}'.format(os.path.join(DEST_DIR, self.handle), EXT)
+        self.max_id = max_id
+        self._tweets = list(self._get_tweets())
+
         self._save_tweets()
 
-    def _get_tweets(self, user, max_id=None):
+    def _get_tweets(self):
         """Hint: use the user_timeline() method on the api you defined in init.
         See tweepy API reference: http://docs.tweepy.org/en/v3.5.0/api.html
         Use a list comprehension / generator to filter out fields
         id_str created_at text (optionally use namedtuple)"""
-
-        tweets = [filter(Tweet, tweet) for tweet in self.api.user_timeline(user, max_id=max_id)]
-        print(tweets)
-        return tweets
+        test = []
+        # Status Object has attributes - D'Oh!
+        tweets = self.api.user_timeline(self.handle, count=NUM_TWEETS, max_id=self.max_id)
+        return (Tweet(s.id_str, s.created_at, s.text.replace('\n', '')) for s in tweets)
 
     def _save_tweets(self):
         """Use the csv module (csv.writer) to write out the tweets.
         If you use a namedtuple get the column names with Tweet._fields.
         Otherwise define them as: id_str created_at text
         You can use writerow for the header, writerows for the rows"""
-        csv.writer(DEST_DIR, Tweet._fields)
+
+        with open(self.output_file, 'w', encoding='utf-8') as f:
+            writer = csv.writer(f)  # Create writer to write into f
+
+            writer.writerow(Tweet._fields)  # Write headers
+            try:
+                writer.writerows(self._tweets)  # unicode bug
+            except UnicodeEncodeError as error:
+                print(error)
 
     def __len__(self):
         """See http://pybit.es/python-data-model.html"""
-        pass
+        return len(self._tweets)  # Custom dunder
 
     def __getitem__(self, pos):
         """See http://pybit.es/python-data-model.html"""
-        pass
+        return self._tweets[pos]
 
 
 if __name__ == "__main__":
