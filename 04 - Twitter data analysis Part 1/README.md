@@ -1,5 +1,8 @@
 ## Code Challenge 04 - Twitter data analysis Part 1: get the data
 
+Coders note - Some trouble with csv writing and unicode expressions translation. Managed to get aorund it
+but it was a little tricky
+
 Instructions [here](http://pybit.es/codechallenge04.html).
 
 ## Write a class to retrieve tweets from the Twitter API
